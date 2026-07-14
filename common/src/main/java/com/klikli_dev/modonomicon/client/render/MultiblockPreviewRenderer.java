@@ -128,13 +128,13 @@ public class MultiblockPreviewRenderer {
             }
 
             guiGraphics.fill(left - 1, top - 1, left + width + 1, top + height + 1, 0xFF000000);
-            drawGradientRect(guiGraphics, left, top, left + width, top + height, 0xFF666666, 0xFF555555);
+            guiGraphics.fillGradient(guiGraphics, left, top, left + width, top + height, 0xFF666666, 0xFF555555);
 
             float fract = (float) blocksDone / Math.max(1, blocks);
             int progressWidth = (int) ((float) width * fract);
             int color = Mth.hsvToRgb(fract / 3.0F, 1.0F, 1.0F) | 0xFF000000;
             int color2 = new Color(color).darker().getRGB();
-            drawGradientRect(guiGraphics, left, top, left + progressWidth, top + height, color, color2);
+            guiGraphics.fillGradient(guiGraphics, left, top, left + progressWidth, top + height, color, color2);
 
             if (!isAnchored) {
                 String s = I18n.get(ModonomiconConstants.I18n.Multiblock.NOT_ANCHORED);
@@ -348,27 +348,6 @@ public class MultiblockPreviewRenderer {
 
     public static BlockPos getStartPos() {
         return offsetApplier.apply(pos);
-    }
-
-    private static void drawGradientRect(GuiGraphics guiGraphics, int left, int top, int right, int bottom, int startColor, int endColor) {
-        float f = (float) (startColor >> 24 & 255) / 255.0F;
-        float f1 = (float) (startColor >> 16 & 255) / 255.0F;
-        float f2 = (float) (startColor >> 8 & 255) / 255.0F;
-        float f3 = (float) (startColor & 255) / 255.0F;
-        float f4 = (float) (endColor >> 24 & 255) / 255.0F;
-        float f5 = (float) (endColor >> 16 & 255) / 255.0F;
-        float f6 = (float) (endColor >> 8 & 255) / 255.0F;
-        float f7 = (float) (endColor & 255) / 255.0F;
-        RenderSystem.enableBlend();
-        RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-        BufferBuilder bufferbuilder = Tesselator.getInstance().begin(Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
-        Matrix4f mat = guiGraphics.pose().last().pose();
-        bufferbuilder.addVertex(mat, right, top, 0).setColor(f1, f2, f3, f);
-        bufferbuilder.addVertex(mat, left, top, 0).setColor(f1, f2, f3, f);
-        bufferbuilder.addVertex(mat, left, bottom, 0).setColor(f5, f6, f7, f4);
-        bufferbuilder.addVertex(mat, right, bottom, 0).setColor(f5, f6, f7, f4);
-        BufferUploader.drawWithShader(bufferbuilder.buildOrThrow());
-        RenderSystem.disableBlend();
     }
 
     /**
