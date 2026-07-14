@@ -128,13 +128,13 @@ public class MultiblockPreviewRenderer {
             }
 
             guiGraphics.fill(left - 1, top - 1, left + width + 1, top + height + 1, 0xFF000000);
-            guiGraphics.fillGradient(guiGraphics, left, top, left + width, top + height, 0xFF666666, 0xFF555555);
+            guiGraphics.fillGradient(left, top, left + width, top + height, 0xFF666666, 0xFF555555);
 
             float fract = (float) blocksDone / Math.max(1, blocks);
             int progressWidth = (int) ((float) width * fract);
             int color = Mth.hsvToRgb(fract / 3.0F, 1.0F, 1.0F) | 0xFF000000;
             int color2 = new Color(color).darker().getRGB();
-            guiGraphics.fillGradient(guiGraphics, left, top, left + progressWidth, top + height, color, color2);
+            guiGraphics.fillGradient(left, top, left + progressWidth, top + height, color, color2);
 
             if (!isAnchored) {
                 String s = I18n.get(ModonomiconConstants.I18n.Multiblock.NOT_ANCHORED);
